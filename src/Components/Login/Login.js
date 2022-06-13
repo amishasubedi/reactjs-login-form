@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useReducer } from "react";
 
-import Card from "../UI/Card/Card";
+import Card from "../../UI/Card/Card";
 import classes from "./Login.module.css";
-import Button from "../UI/Button/Button";
+import Button from "../../UI/Button/Button";
 
 
 // grouping small state together and managing in one place - useReducer

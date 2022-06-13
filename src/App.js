@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Home from "./Home/Home";
-import MainHeader from "./MainHeader/MainHeader";
-import Login from "./Login/Login";
+import Home from "./Components/Home/Home";
+import MainHeader from "./Components/MainHeader/MainHeader";
+import Login from "./Components/Login/Login";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // initial condition - ask user to login with their data
