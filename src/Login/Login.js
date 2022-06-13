@@ -13,10 +13,20 @@ const Login = (props) => {
 
   // After every login component function execution, useEffect runs only if either setform is valid or enteredEmail or entered password
   useEffect(() => {
-    setFormIsValid(
-      // updating the react state
-      enteredPassword().length > 6 && enteredEmail.includes("@")
-    );
+    console.log("Checking form validity"); // this executes with every key stroke- not an ideal way - solution ?
+    //- debouncing user input
+    const handler = setTimeout(() => {
+      // updating the state
+      setFormIsValid(
+        enteredPassword().length > 6 && enteredEmail.includes("@")
+      );
+    }, 500); // but we should have one ongoing timer at a time - solution? - clear timer
+
+    // clean up process - this runs before every new side effect function execution but doesnot run before the first side effect function execution
+    return () => {
+      console.log("Clean up");
+      clearTimeout(handler); // clears the timer that was set
+    };
   }, [enteredEmail, enteredPassword]); // entered email and password are dependencies
 
   const emailChangeHandler = (event) => {
