@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -10,6 +10,14 @@ const Login = (props) => {
   const [enteredPassword, setEnteredPassword] = useState("");
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+
+  // After every login component function execution, useEffect runs only if either setform is valid or enteredEmail or entered password
+  useEffect(() => {
+    setFormIsValid(
+      // updating the react state
+      enteredPassword().length > 6 && enteredEmail.includes("@")
+    );
+  }, [enteredEmail, enteredPassword]); // entered email and password are dependencies
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
