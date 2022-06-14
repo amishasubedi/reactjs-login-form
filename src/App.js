@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Home from "./Components/Home/Home";
 import MainHeader from "./Components/MainHeader/MainHeader";
 import Login from "./Components/Login/Login";
+import AuthContext from "./Store/auth-context";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // initial condition - ask user to login with their data
@@ -30,13 +31,13 @@ function App() {
   };
 
   return (
-    <React.Fragment>
+    <AuthContext.Provider>
       <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
         {isLoggedIn && <Home onLogout={logoutHandler} />}
       </main>
-    </React.Fragment>
+    </AuthContext.Provider>
   );
 }
 

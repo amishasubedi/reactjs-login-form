@@ -76,17 +76,17 @@ const Login = (props) => {
     // setEnteredEmail(event.target.value);
     dispatchEmail({ type: "user-input", val: event.target.value }); // val to store what user entered
 
-    setFormIsValid(event.target.value.includes("@") && emailsState.isValid);
+    //setFormIsValid(event.target.value.includes("@") && emailsState.isValid);
   };
 
   const passwordChangeHandler = (event) => {
     // setEnteredPassword(event.target.value);
     dispatchPassword({ type: "user-input", val: event.target.value });
 
-    setFormIsValid(
-      // enteredEmail.includes('@') && event.target.value.trim().length > 6
-      passwordState.isValid && event.target.value.trim().length > 6
-    );
+    //setFormIsValid(
+    // enteredEmail.includes('@') && event.target.value.trim().length > 6
+    //passwordState.isValid && event.target.value.trim().length > 6
+    //);
   };
 
   const validateEmailHandler = () => {
