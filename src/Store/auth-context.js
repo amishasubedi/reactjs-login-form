@@ -1,36 +1,43 @@
 import React, { useState, useEffect } from "react";
 
-// AuthContext is an object that contains a component
 const AuthContext = React.createContext({
   isLoggedIn: false,
-  onLogout = () => {},
-  onLogin: (email, password) => {}
+  onLogout: () => {},
+  onLogin: (email, password) => {},
 });
 
-
-export const AuthContextProvider = props => {
-  const[isLoggedIn, setIsLoggedIn] = useState(false);
+export const AuthContextProvider = (props) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // useEffect allows you to perform side effects in your components
+    const storedUserLoggedInInformation = localStorage.getItem("isLoggedIn");
 
-    // locale storage is a storage mechanism for built in browser
-    const storedUserLoggedInInfo = localStorage.getItem("isLoggedIn"); // extract value either 1 - indicates login or 0 - indicates logout
-
-    // when the page reloads the app function restarts which will take back to login page but the user should be still logged in
-    if (storedUserLoggedInInfo === "1") {
-      setIsLoggedIn(true); // to load the logged in data
+    if (storedUserLoggedInInformation === "1") {
+      setIsLoggedIn(true);
     }
   }, []);
 
   const logoutHandler = () => {
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
-  }
+  };
 
   const loginHandler = () => {
-    localStorage.setItem(isLoggedIn);
+    localStorage.setItem("isLoggedIn", "1");
     setIsLoggedIn(true);
-  }
-}
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isLoggedIn: isLoggedIn,
+        onLogout: logoutHandler,
+        onLogin: loginHandler,
+      }}
+    >
+      {props.children}
+    </AuthContext.Provider>
+  );
+};
+
 export default AuthContext;

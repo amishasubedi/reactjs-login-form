@@ -1,8 +1,15 @@
-import React, { useState, useEffect, useReducer, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useContext,
+  useRef,
+} from "react";
 
 import Card from "../UI/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button";
+import AuthContext from "../../Store/auth-context";
 import Input from "../UI/Input/Input";
 
 // grouping small state together and managing in one place - useReducer
@@ -46,6 +53,9 @@ const Login = (props) => {
 
   const authCtx = useContext(AuthContext);
 
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+
   // understanding useEffect
   useEffect(() => {
     console.log("Effect running");
@@ -60,11 +70,11 @@ const Login = (props) => {
 
   // After every login component function execution, useEffect runs only if either setform is valid or enteredEmail or entered password
   useEffect(() => {
-    console.log("Checking form validity"); // this executes with every key stroke- not an ideal way - solution ?
-    //- debouncing user input
     const handler = setTimeout(() => {
+      console.log("Checking form validity"); // this executes with every key stroke- not an ideal way - solution ?
+      //- debouncing user input
       // updating the state
-      setFormIsValid(emailsState.isValid && passwordState.isValid);
+      setFormIsValid(emailIsValid && passwordIsValid);
     }, 500); // but we should have one ongoing timer at a time
 
     // clean up process - this runs before every new side effect function execution but doesnot run before the first side effect function execution
@@ -105,13 +115,20 @@ const Login = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     // props.onLogin(enteredEmail, enteredPassword);
-    authCtx.onLogin(emailsState.value, passwordState.value);
+    if (formIsValid) {
+      authCtx.onLogin(emailsState.value, passwordState.value);
+    } else if (!emailIsValid) {
+      emailInputRef.current.focus();
+    } else {
+      passwordInputRef.current.focus();
+    }
   };
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <Input
+          ref={emailInputRef}
           id="email"
           label="E-Mail"
           type="email"
@@ -122,6 +139,7 @@ const Login = (props) => {
         />
 
         <Input
+          ref={passwordInputRef}
           id="password"
           label="Password"
           type="password"
@@ -130,24 +148,8 @@ const Login = (props) => {
           onChange={passwordChangeHandler}
           onBlur={validatePasswordHandler}
         />
-        <div
-          className={`${classes.control} ${
-            // passwordIsValid === false ? classes.invalid : ""
-            passwordState.isValid === false ? classes.invalid : ""
-          }`}
-        >
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            // value={enteredPassword}
-            value={passwordState.value}
-            onChange={passwordChangeHandler}
-            onBlur={validatePasswordHandler}
-          />
-        </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+          <Button type="submit" className={classes.btn}>
             Login
           </Button>
         </div>
